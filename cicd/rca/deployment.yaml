@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sre-agent
+  namespace: default
+spec:
+  replicas: 1
+  # PHẦN NÀY QUAN TRỌNG: Phải có selector khớp với labels bên dưới
+  selector:
+    matchLabels:
+      app: sre-agent 
+  template:
+    metadata:
+      # PHẦN NÀY QUAN TRỌNG: Labels phải khớp với selector ở trên
+      labels:
+        app: sre-agent 
+    spec:
+      serviceAccountName: sre-agent-sa
+      containers:
+      - name: sre-agent
+        image: 891920435433.dkr.ecr.ap-southeast-1.amazonaws.com/de00175-app:agent-v1.0.33
+        env:
+        - name: OPENROUTER_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: chatbot
+              key: api-key
+        - name: MODEL_ID
+          value: "google/gemma-2-9b-it"

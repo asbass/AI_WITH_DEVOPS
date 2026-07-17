@@ -1,0 +1,32 @@
+# values.yaml
+prometheus:
+  prometheus:
+  prometheusSpec:
+    retention: 15d
+    storageSpec:
+      emptyDir: {}
+alertmanager:
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      group_by: ['alertname']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 1h
+      receiver: 'telegram'
+    receivers:
+    - name: 'telegram'
+      telegram_configs:
+      - bot_token: "8797427567:AAFlB7lRVN-J0ZYwowqbciZg1ihED0--KYU"
+        chat_id: 5350035230
+        message: >-
+          {{ range .Alerts }}
+          🚨 *{{ .Annotations.summary }}*
+          📝 *Mô tả:* {{ .Annotations.description }}
+          🕒 *Thời gian:* {{ .StartsAt.Format "15:04:05" }}
+          {{ end }}
+
+# Tự động phát hiện ServiceMonitor (để Prometheus thấy app Flask của bạn)
+serviceMonitorSelectorNilUsesHelmValues: false
+serviceMonitorSelector: {}

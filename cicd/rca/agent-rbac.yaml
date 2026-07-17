@@ -1,0 +1,29 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sre-agent-role
+  namespace: app
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "patch", "update"]
+- apiGroups: [""] # Quyền cho Pods (thuộc api group trống)
+  resources: ["pods", "pods/status"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""] # Quyền đọc log
+  resources: ["pods/log"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sre-agent-binding
+  namespace: app
+subjects:
+- kind: ServiceAccount
+  name: sre-agent-sa
+  namespace: default
+roleRef:
+  kind: Role
+  name: sre-agent-role
+  apiGroup: rbac.authorization.k8s.io

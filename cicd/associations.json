@@ -1,0 +1,98 @@
+[
+    {
+        "SubnetId": "subnet-0eeba809b2db11926",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-0c51b6b97f99b69ed",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-08237d0f7433982f1",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-095f2eb89045eb289",
+        "Main": false
+    },
+    {
+        "SubnetId": null,
+        "Main": true
+    },
+    {
+        "SubnetId": "subnet-0cd89c21fc661fbf8",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-0f3dd8863f193673a",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-01656530b2ab517ee",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-08220dceff3f8941e",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-0fd9aaba774f4f68e",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-02bd76f67779b0d18",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-00cc2f1df9ce195ab",
+        "Main": false
+    },
+    {
+        "SubnetId": null,
+        "Main": true
+    },
+    {
+        "SubnetId": null,
+        "Main": true
+    },
+    {
+        "SubnetId": "subnet-06454400e5117140e",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-0f3ad238b73f3fe3a",
+        "Main": false
+    },
+    {
+        "SubnetId": null,
+        "Main": true
+    },
+    {
+        "SubnetId": "subnet-0f8c9105142c2893e",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-0751fe015dd77188f",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-0e93292776a04fdab",
+        "Main": false
+    },
+    {
+        "SubnetId": null,
+        "Main": true
+    },
+    {
+        "SubnetId": "subnet-007561d44c2fadaad",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-0be529dee0893f77a",
+        "Main": false
+    },
+    {
+        "SubnetId": "subnet-03ee369bc39ca00f0",
+        "Main": false
+    }
+]

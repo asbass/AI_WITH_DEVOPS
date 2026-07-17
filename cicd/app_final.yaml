@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-db
+  namespace: app
+type: Opaque
+stringData:
+  DB_HOST: terraform-20260707032021621200000001.chom4aao050k.ap-southeast-1.rds.amazonaws.com
+  DB_NAME: gameboard
+  DB_USER: admin
+  DB_PASSWORD: Tai123456789
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: app
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: app }
+  template:
+    metadata:
+      labels: { app: app }
+    spec:
+      containers:
+        - name: app
+          image: 891920435433.dkr.ecr.ap-southeast-1.amazonaws.com/de00175-app:latest
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: app-db
+                  key: DB_HOST
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: app-db
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: app-db
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-db
+                  key: DB_PASSWORD
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - secretRef: { name: app-db }
+          readinessProbe:
+            httpGet: { path: /health, port: 5000 }
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet: { path: /health, port: 5000 }
+            initialDelaySeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  namespace: app
+spec:
+  selector: { app: app }
+  ports:
+    - port: 80
+      targetPort: 5000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app
+  namespace: app
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app
+                port: { number: 80 }

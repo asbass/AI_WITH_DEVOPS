@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      securityContext:
+        fsGroup: 1000 # Đảm bảo quyền truy cập cho volume
+      containers:
+      - name: jenkins
+        image: jenkins/jenkins:lts
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 50000 # Cần thiết cho Jenkins Agent (JNLP)
+          name: agent
+        volumeMounts:
+        - name: jenkins-data
+          mountPath: /var/jenkins_home
+      volumes:
+      - name: jenkins-data
+        persistentVolumeClaim:
+          claimName: jenkins-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-service
+  namespace: jenkins
+spec:
+  type: LoadBalancer # Đã sửa LoadBalance -> LoadBalancer
+  ports:
+  - port: 80           # Cổng người dùng truy cập
+    targetPort: 8080   # Cổng bên trong container
+    protocol: TCP
+    name: http
+  - port: 50000        # Cổng cho agent kết nối
+    targetPort: 50000
+    protocol: TCP
+    name: agent
+  selector:
+    app: jenkins

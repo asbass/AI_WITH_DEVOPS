@@ -1,0 +1,15 @@
+# Kết nối Kubernetes
+kubernetes>=30.0.0
+
+# Truy vấn Prometheus & HTTP
+requests>=2.32.0
+
+# Xử lý cấu hình biến môi trường
+python-dotenv>=1.0.0
+
+# Nếu bạn không cài được 'strands', hãy dùng thư viện thay thế tương đương
+# Để Agent lập luận tốt, dùng langchain-openai
+openai
+kubernetes
+requests
+python-telegram-bot
