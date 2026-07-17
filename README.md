@@ -1,215 +1,193 @@
-# 🤖 AI_WITH_DEVOPS
+# 🤖 AI Kubernetes Self-Healing Agent
 
-An AI-powered Self-Healing DevOps platform built on AWS EKS.
-
-This project demonstrates a complete DevOps workflow that combines Kubernetes, Jenkins, Terraform, Prometheus, Amazon ECR and an AI Agent (Llama 3.1 via OpenRouter) to automatically detect incidents, notify administrators through Telegram and perform intelligent remediation.
+An AI-powered Kubernetes remediation agent that continuously monitors cluster health, performs root cause analysis (RCA), sends Telegram alerts, and automatically recovers failed workloads using Llama 3.1 via OpenRouter.
 
 ---
 
-## 🚀 Features
+## Overview
 
-- CI/CD Pipeline with Jenkins
-- Infrastructure as Code using Terraform
-- Kubernetes Deployment on AWS EKS
-- Docker Image Registry (Amazon ECR)
-- NGINX Ingress Controller
-- Prometheus Monitoring
-- Telegram Alerting
+This project demonstrates how Large Language Models (LLMs) can assist Site Reliability Engineering (SRE) by automating incident detection and recovery inside a Kubernetes cluster.
+
+The agent continuously monitors Kubernetes resources and Prometheus metrics. When an incident is detected, it:
+
+1. Detects the failure.
+2. Collects Kubernetes logs and events.
+3. Performs AI-powered Root Cause Analysis (RCA).
+4. Sends a detailed Telegram notification.
+5. Executes automatic rollback when appropriate.
+6. Verifies the rollout status before reporting success.
+
+---
+
+## Features
+
 - AI-powered Root Cause Analysis
-- Automatic Rollback (Self-Healing)
+- Kubernetes Health Monitoring
+- Telegram ChatOps
+- Prometheus Metrics Integration
+- Automatic Rollback
+- Rollout Verification
+- CrashLoopBackOff Detection
+- ImagePullBackOff Detection
+- HTTP 5xx Monitoring
+- Kubernetes Event Collection
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
 ```text
-                GitHub
+              Prometheus
                    │
                    ▼
-             Jenkins Pipeline
+          Monitoring Watchdog
                    │
-        ┌──────────┴──────────┐
-        ▼                     ▼
- Docker Build           Terraform Apply
-        │                     │
-        ▼                     ▼
-   Amazon ECR            AWS Infrastructure
-        │
-        ▼
- Kubernetes (Amazon EKS)
-        │
-        ▼
-  NGINX Ingress Controller
-        │
-        ▼
-   Application Service
-        │
-        ▼
-    Prometheus Metrics
-        │
-        ▼
-   AI Monitoring Agent
-        │
-        ▼
- Telegram Notification
-        │
-        ▼
- Automatic Rollback
+                   ▼
+         Kubernetes API Server
+                   │
+                   ▼
+        AI Self-Healing Agent
+         │              │
+         │              ▼
+         │       OpenRouter
+         │        Llama 3.1
+         │
+         ▼
+Telegram Notification
+         │
+         ▼
+Rollback Deployment
+         │
+         ▼
+Verify Rollout
 ```
 
 ---
 
-# 📦 Tech Stack
-
-| Category | Technology |
-|----------|------------|
-| Cloud | AWS |
-| Container | Docker |
-| Orchestration | Kubernetes (EKS) |
-| CI/CD | Jenkins |
-| IaC | Terraform |
-| Registry | Amazon ECR |
-| Monitoring | Prometheus |
-| AI | Llama 3.1 (OpenRouter) |
-| Programming | Python |
-| Notification | Telegram Bot |
-
----
-
-# 📁 Project Structure
+## Project Structure
 
 ```text
-AI_WITH_DEVOPS
-│
-├── cicd/
-│   ├── Jenkinsfile
-│   ├── terraform/
-│   ├── app.yaml
-│   ├── sc.yaml
-│   ├── pvc.yaml
-│   ├── jenkins-deploy.yaml
-│   ├── agent-rbac.yaml
-│   └── README.md
-│
-├── NNFS_PygameMySQL/
-│
+.
+├── agent.py
+├── requirements.txt
+├── Dockerfile
+├── deployment.yaml
+├── agent-rbac.yaml
 └── README.md
 ```
 
 ---
 
-# 🔄 CI/CD Workflow
+## Technologies
 
-1. Developer pushes code to GitHub.
-2. Jenkins detects repository changes.
-3. Docker image is built automatically.
-4. Image is pushed to Amazon ECR.
-5. Kubernetes Deployment is updated.
-6. Prometheus monitors application health.
-7. AI Agent analyzes incidents.
-8. Telegram sends notifications.
-9. AI performs automatic rollback if necessary.
+- Python
+- Kubernetes API
+- Prometheus
+- Telegram Bot API
+- OpenRouter API
+- Llama 3.1
+- Docker
 
 ---
 
-# 🧠 AI Self-Healing Workflow
+## Workflow
 
 ```text
-Prometheus
-      │
-      ▼
-Watchdog Thread
-      │
-      ▼
+Watchdog
+    │
+    ▼
 Detect Incident
-      │
-      ▼
+    │
+    ▼
 Collect Logs
-      │
-      ▼
-AI Root Cause Analysis
-      │
-      ▼
-Telegram Alert
-      │
-      ▼
+    │
+    ▼
+Analyze Root Cause
+    │
+    ▼
+Send Telegram Alert
+    │
+    ▼
 Rollback Deployment
-      │
-      ▼
-Verify Rollout Status
-      │
-      ▼
-Recovered
+    │
+    ▼
+Verify Recovery
 ```
 
 ---
 
-# 📊 Monitoring
+## Deployment
 
-The monitoring layer includes:
+Install dependencies
 
-- HTTP 5xx error detection
-- CrashLoopBackOff detection
-- ImagePullBackOff detection
-- Pod status monitoring
-- Memory monitoring
-- Kubernetes Event inspection
-- Root Cause Analysis
+```bash
+pip install -r requirements.txt
+```
 
----
+Deploy RBAC
 
-# 🤖 AI Agent
+```bash
+kubectl apply -f agent-rbac.yaml
+```
 
-The AI Agent uses OpenRouter with Llama 3.1 to:
+Deploy Agent
 
-- Understand administrator commands
-- Analyze cluster health
-- Collect Kubernetes logs
-- Perform Root Cause Analysis
-- Execute rollback
-- Verify rollout status
-- Prevent false-positive recovery
+```bash
+kubectl apply -f deployment.yaml
+```
 
 ---
 
-# 📖 Deployment Guide
-
-Detailed deployment instructions are available in:
+## Environment Variables
 
 ```text
-cicd/README.md
+OPENROUTER_API_KEY=<YOUR_API_KEY>
+
+TELEGRAM_BOT_TOKEN=<YOUR_TOKEN>
+
+TELEGRAM_CHAT_ID=<YOUR_CHAT_ID>
+
+PROMETHEUS_URL=http://prometheus.monitoring.svc.cluster.local:9090
 ```
 
 ---
 
-# 📸 Screenshots
+## Demo Scenario
 
-Recommended screenshots:
+Example incident:
 
-- Jenkins Dashboard
-- Kubernetes Pods
-- Telegram Alert
-- Prometheus Dashboard
-- AI Rollback
-- Jenkins Pipeline
-
----
-
-# 🔐 Security
-
-Do **not** commit:
-
-- API Keys
-- Telegram Tokens
-- Jenkins Secrets
-- EC2 Public IP
-- AWS Credentials
-- Database Passwords
-
-Use Kubernetes Secrets or AWS Secrets Manager instead.
+- Deploy an invalid Docker image.
+- Kubernetes reports `ImagePullBackOff`.
+- The agent detects the failure.
+- Logs and events are collected.
+- AI generates a Root Cause Analysis.
+- A Telegram alert is sent.
+- The deployment is rolled back automatically.
+- The rollout status is verified.
 
 ---
 
-# 📄 License
+## Related Project
+
+This AI Agent is designed to integrate with the CI/CD platform below:
+
+➡️ **AWS EKS Jenkins CI/CD Platform**
+
+(Replace this section with your repository URL.)
+
+---
+
+## Future Improvements
+
+- Multi-cluster support
+- Slack and Microsoft Teams notifications
+- Argo Rollouts integration
+- Grafana dashboard
+- AI incident summarization
+- Multi-agent architecture
+
+---
+
+## License
 
 MIT License
