@@ -1,4 +1,3 @@
-# AI_WITH_DEVOPS
 # 🤖 AI_WITH_DEVOPS
 
 An AI-powered Self-Healing DevOps platform built on AWS EKS.
