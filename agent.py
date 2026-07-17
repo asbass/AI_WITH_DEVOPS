@@ -277,7 +277,7 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 if __name__ == "__main__":
     # Thay Token Telegram của bạn vào đây
-    app = ApplicationBuilder().token("8797427567:AAFlB7lRVN-J0ZYwowqbciZg1ihED0--KYU").build()
+    app = ApplicationBuilder().token("").build()
     
     # Đăng ký các handler xử lý tin nhắn chat
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
