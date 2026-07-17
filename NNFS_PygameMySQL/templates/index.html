@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>No Need For Speed</title>
+
+    <style>
+        body{
+            margin:0;
+            overflow:hidden;
+            background:#222;
+            font-family:Arial;
+            color:white;
+            text-align:center;
+        }
+
+        canvas{
+            background:white;
+            display:block;
+            margin:auto;
+            border:3px solid black;
+        }
+
+        #ui{
+            position:absolute;
+            top:10px;
+            left:10px;
+            font-size:24px;
+        }
+
+        #leaderboard{
+            position:absolute;
+            right:10px;
+            top:10px;
+            background:rgba(0,0,0,0.7);
+            padding:10px;
+            width:200px;
+        }
+
+        button{
+            padding:10px;
+            margin-top:10px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="ui">
+    Score: <span id="score">0</span>
+</div>
+
+<div id="leaderboard">
+    <h3>Leaderboard</h3>
+    <div id="scores"></div>
+</div>
+
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+
+<script>
+
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let score = 0;
+let gameOver = false;
+
+const car = {
+    x: 370,
+    y: 500,
+    width: 60,
+    height: 100,
+    speed: 7
+};
+
+const obstacle = {
+    x: Math.random() * 700,
+    y: -100,
+    width: 100,
+    height: 100,
+    speed: 5
+};
+
+const keys = {};
+
+document.addEventListener("keydown", (e)=>{
+    keys[e.key] = true;
+});
+
+document.addEventListener("keyup", (e)=>{
+    keys[e.key] = false;
+});
+
+function drawCar(){
+    ctx.fillStyle = "blue";
+    ctx.fillRect(car.x, car.y, car.width, car.height);
+}
+
+function drawObstacle(){
+    ctx.fillStyle = "red";
+    ctx.fillRect(
+        obstacle.x,
+        obstacle.y,
+        obstacle.width,
+        obstacle.height
+    );
+}
+
+function moveCar(){
+
+    if(keys["ArrowLeft"]){
+        car.x -= car.speed;
+    }
+
+    if(keys["ArrowRight"]){
+        car.x += car.speed;
+    }
+
+    if(car.x < 0){
+        car.x = 0;
+    }
+
+    if(car.x + car.width > canvas.width){
+        car.x = canvas.width - car.width;
+    }
+}
+
+function moveObstacle(){
+
+    obstacle.y += obstacle.speed;
+
+    if(obstacle.y > canvas.height){
+
+        obstacle.y = -100;
+        obstacle.x = Math.random() * 700;
+
+        score++;
+
+        document.getElementById("score").innerText = score;
+
+        obstacle.speed += 0.3;
+    }
+}
+
+function checkCollision(){
+
+    if(
+        car.x < obstacle.x + obstacle.width &&
+        car.x + car.width > obstacle.x &&
+        car.y < obstacle.y + obstacle.height &&
+        car.y + car.height > obstacle.y
+    ){
+        endGame();
+    }
+}
+
+async function endGame(){
+
+    gameOver = true;
+
+    let player = prompt("Enter your name");
+
+    if(player){
+
+        await fetch("/save-score",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                player:player,
+                score:score
+            })
+        });
+    }
+
+    alert("Game Over! Score: " + score);
+
+    location.reload();
+}
+
+async function loadLeaderboard(){
+
+    const response = await fetch("/leaderboard");
+
+    const data = await response.json();
+
+    let html = "";
+
+    data.forEach((item,index)=>{
+
+        html += `
+            <div>
+                ${index+1}. ${item.player} - ${item.score}
+            </div>
+        `;
+    });
+
+    document.getElementById("scores").innerHTML = html;
+}
+
+function gameLoop(){
+
+    if(gameOver){
+        return;
+    }
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    moveCar();
+    moveObstacle();
+
+    drawCar();
+    drawObstacle();
+
+    checkCollision();
+
+    requestAnimationFrame(gameLoop);
+}
+
+loadLeaderboard();
+gameLoop();
+
+</script>
+
+</body>
+</html>
