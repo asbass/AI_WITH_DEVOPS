@@ -14,7 +14,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 # Cấu hình AI Client
-client_ai = OpenAI(api_key=os.getenv("OPENROUTER_API_KEY"), base_url="https://openrouter.ai/api/v1")
+client_ai = OpenAI(api_key=os.getenv("OPENROUTER_API_KEY"), base_url="ID_API")
 MODEL_ID = "meta-llama/llama-3.1-8b-instruct"
 
 # Cấu hình K8s Client
