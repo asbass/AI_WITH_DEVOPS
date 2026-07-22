@@ -3,7 +3,11 @@
 An AI-powered Kubernetes remediation agent that continuously monitors cluster health, performs root cause analysis (RCA), sends Telegram alerts, and automatically recovers failed workloads using Llama 3.1 via OpenRouter.
 
 ---
-
+![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-API-326CE5?logo=kubernetes)
+![Prometheus](https://img.shields.io/badge/Prometheus-Monitoring-E6522C?logo=prometheus)
+![Docker](https://img.shields.io/badge/Docker-Container-2496ED?logo=docker)
+![Telegram](https://img.shields.io/badge/Telegram-ChatOps-26A5E4?logo=telegram)
 ## Overview
 
 This project demonstrates how Large Language Models (LLMs) can assist Site Reliability Engineering (SRE) by automating incident detection and recovery inside a Kubernetes cluster.
