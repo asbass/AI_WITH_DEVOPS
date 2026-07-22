@@ -169,12 +169,9 @@ Example incident:
 
 ## Related Project
 
-This AI Agent is designed to integrate with the CI/CD platform below:
+This AI Agent integrates with the Cloud Native CI/CD platform below:
 
-➡️ **AWS EKS Jenkins CI/CD Platform**
-
-(Replace this section with your repository URL.)
-
+➡️ https://github.com/asbass/cicd
 ---
 
 ## Future Improvements
